@@ -1,0 +1,48 @@
+import UIKit
+enum CarError: Error{
+    case problemswithclutch
+    case problemswithwheels
+    case instoragenocars
+}
+struct Car{
+    var DoesTheClutchWork:Bool
+    var wheels:Int
+    var price:Int
+}
+class Storage{
+var yourmoney=60
+var carsinstorage = [
+    "1":Car(DoesTheClutchWork: false, wheels: 4, price: 20),
+    "2":Car(DoesTheClutchWork: true, wheels: 4, price:60  ),
+    "3":Car(DoesTheClutchWork: false, wheels: 3, price: 13)
+]
+func GetTheCar(withName: String) throws{
+    guard var car = carsinstorage[withName]else {
+        throw CarError.instoragenocars
+}
+    guard car.DoesTheClutchWork != false else{
+        throw CarError.problemswithclutch
+}
+    guard car.wheels < 4 else{
+        throw CarError.problemswithwheels
+}
+    yourmoney-=car.price
+    car.DoesTheClutchWork=true
+    car.wheels-=4
+    carsinstorage[withName] = car
+    print("Your car is numbered\(withName)")
+}
+}
+let storage=Storage()
+try? storage.GetTheCar(withName: "2")
+storage.yourmoney
+storage.carsinstorage
+
+do {
+    try storage.GetTheCar(withName: "1")
+} catch CarError.problemswithclutch{
+    print("This car have some problems with the clutch")
+} catch CarError.problemswithwheels{
+    print("This car doesnt have 1 wheel")
+}
+
